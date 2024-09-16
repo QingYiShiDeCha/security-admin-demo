@@ -15,7 +15,8 @@ request.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`; // 如果有 token，附加到请求头
     }
-
+    const requestData = config.params
+    console.log('请求数据', requestData)
     // 可以在这里添加一些 loading 状态
     return config; // 返回配置，继续请求
   },
@@ -31,6 +32,8 @@ request.interceptors.response.use(
   (response) => {
     // 处理响应数据
     const { data } = response;
+    console.log('res', response)
+    console.log('data', data)
     if (data.code !== 200) {
       // 如果接口返回的状态码不是 200，认为是错误
       ElMessage.error(data.message || "请求失败");
