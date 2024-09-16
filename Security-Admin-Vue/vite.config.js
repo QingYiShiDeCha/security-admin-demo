@@ -24,8 +24,17 @@ export default defineConfig({
       extensions: ['vue'],
       deep: true,
       dts: 'src/components.d.ts', // 启用类型声明文件生成
-    })
+    }),
   ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8088/',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, '')
+      }
+    }
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
