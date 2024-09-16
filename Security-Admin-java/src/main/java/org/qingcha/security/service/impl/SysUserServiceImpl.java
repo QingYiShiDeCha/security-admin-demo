@@ -1,5 +1,6 @@
 package org.qingcha.security.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.qingcha.security.entity.SysUser;
 import org.qingcha.security.service.SysUserService;
@@ -15,6 +16,18 @@ import org.springframework.stereotype.Service;
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
     implements SysUserService{
 
+    /**
+     * 通过用户名查询角色
+     *
+     * @param username 用户名
+     * @return SysUser
+     */
+    @Override
+    public SysUser queryByUsername(String username) {
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUser::getUsername, username);
+        return baseMapper.selectOne(queryWrapper);
+    }
 }
 
 
