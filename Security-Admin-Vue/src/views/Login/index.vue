@@ -4,7 +4,11 @@
       <h2 class="login-title">用户登录</h2>
       <el-form :model="loginForm" class="login-form" ref="loginForm" :rules="rules" label-width="80px">
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="loginForm.username" placeholder="请输入用户名"></el-input>
+          <el-input v-model="loginForm.username" placeholder="请输入用户名">
+            <template #prefix>
+              <SvgIcon iconClass="user" />
+            </template>
+          </el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input v-model="loginForm.password" type="password" placeholder="请输入密码"></el-input>
@@ -20,6 +24,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
+// import SvgIcon from '@/components/svg-icon/index.vue'
 
 const loginForm = reactive({
   username: '',
