@@ -11,7 +11,11 @@
           </el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="loginForm.password" type="password" placeholder="请输入密码"></el-input>
+          <el-input v-model="loginForm.password" type="password" placeholder="请输入密码">
+            <template #prefix>
+              <SvgIcon iconClass="password" />
+            </template>
+          </el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit" class="login-btn">登录</el-button>
