@@ -1,4 +1,4 @@
-package org.qingcha.security.entity;
+package org.qingcha.security.common.result;
 
 import java.util.HashMap;
 

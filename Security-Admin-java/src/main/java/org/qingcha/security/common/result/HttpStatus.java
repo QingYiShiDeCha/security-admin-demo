@@ -1,4 +1,4 @@
-package org.qingcha.security.entity;
+package org.qingcha.security.common.result;
 
 /**
  * 返回HTTP状态码
