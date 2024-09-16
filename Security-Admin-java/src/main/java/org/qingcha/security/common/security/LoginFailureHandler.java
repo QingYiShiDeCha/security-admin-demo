@@ -1,6 +1,7 @@
 package org.qingcha.security.common.security;
 
 import com.alibaba.druid.support.json.JSONUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.qingcha.security.common.result.AjaxResult;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
@@ -19,19 +20,22 @@ import java.nio.charset.StandardCharsets;
  * @author QingCha
  */
 @Component
+@Slf4j
 public class LoginFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         response.setContentType("application/json;charset=utf-8");
         ServletOutputStream outputStream = response.getOutputStream();
+        response.setCharacterEncoding("utf-8");
 
         String message = exception.getMessage();
 
         if (exception instanceof BadCredentialsException) {
+            log.error(message);
             message = "用户名或者密码错误";
         }
 
-        Object put = AjaxResult.error(message);
+        AjaxResult put = AjaxResult.error(message);
 
         outputStream.write(JSONUtils.toJSONString(put).getBytes(StandardCharsets.UTF_8));
         outputStream.flush();
