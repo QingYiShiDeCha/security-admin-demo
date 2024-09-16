@@ -1,10 +1,19 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <el-button>按钮</el-button>
   <RouterView />
 </template>
 
-<style scoped></style>
+<style scoped>
+html,
+body,
+#app {
+  height: 100%;
+}
+
+.app-container {
+  padding: 20px;
+}
+</style>
