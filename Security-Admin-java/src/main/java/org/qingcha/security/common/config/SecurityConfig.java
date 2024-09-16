@@ -3,6 +3,8 @@ package org.qingcha.security.common.config;
 import lombok.RequiredArgsConstructor;
 import org.qingcha.security.common.security.LoginFailureHandler;
 import org.qingcha.security.common.security.LoginSuccessHandler;
+import org.qingcha.security.common.security.UserDetailsServiceImpl;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -10,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * Security configure
@@ -23,14 +26,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
+    private final UserDetailsServiceImpl userDetailsService;
 
     private final String[] WHITELIST = {
-            "/auth/login", "/auth/logout", "/auth/captcha", "/auth/password", "/image/**"
+            "/login", "/logout", "/captcha", "/password", "/image/**", "/sys/user/insert"
     };
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        super.configure(auth);
+        auth.userDetailsService(userDetailsService);
     }
 
     @Override
@@ -57,5 +61,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 异常配置
 
         // 自定义过滤器配置
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
