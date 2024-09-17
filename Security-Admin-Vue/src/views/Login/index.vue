@@ -28,8 +28,11 @@
 <script setup>
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { login } from '@/api/auth'
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
 
+const { doLogin, getToken } = useAuthStore()
+const router = useRouter()
 const loginForm = ref({
   username: '',
   password: ''
@@ -49,20 +52,17 @@ const loginFormRef = ref(null)
 const onSubmit = () => {
   loginFormRef.value?.validate(async (valid) => {
     if (valid) {
-
-      console.log('loginForm', loginForm.value)
-      ElMessage.success('登录成功！')
-      // 执行登录逻辑
-      const res = await login(loginForm.value)
-      console.log(res)
+      await doLogin(loginForm.value)
+      const token = getToken
+      console.log('token', token)
+      if (token && token !== '') {
+        ElMessage.success('登录成功!')
+        router.push('/')
+      }
     } else {
       ElMessage.error('请检查输入内容')
     }
   })
-}
-
-function changeInput() {
-
 }
 </script>
 
