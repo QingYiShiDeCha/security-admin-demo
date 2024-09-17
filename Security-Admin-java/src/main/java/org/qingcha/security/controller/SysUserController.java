@@ -1,6 +1,7 @@
 package org.qingcha.security.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.qingcha.security.common.result.AjaxResult;
 import org.qingcha.security.entity.SysUser;
 import org.qingcha.security.service.SysUserService;
@@ -13,8 +14,20 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/sys/user")
 @RequiredArgsConstructor
+@Slf4j
 public class SysUserController {
     private final SysUserService sysUserService;
+
+    /**
+     * 获取用户列表
+     *
+     * @return AjaxResult
+     */
+    @GetMapping("/list")
+    public AjaxResult list() {
+        log.info("list");
+        return AjaxResult.success(sysUserService.list());
+    }
 
     /**
      * 添加用户
