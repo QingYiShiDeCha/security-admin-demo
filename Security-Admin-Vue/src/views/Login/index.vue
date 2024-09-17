@@ -29,10 +29,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
+import { encrypt, decrypt } from '@/utils/jsencrypt'
+import Cookies from 'js-cookie'
 
 const { doLogin, getToken } = useAuthStore()
 const router = useRouter()
@@ -56,6 +58,13 @@ const loginFormRef = ref(null)
 const onSubmit = () => {
   loginFormRef.value?.validate(async (valid) => {
     if (valid) {
+
+      if (loginForm.value.remember) {
+        setCookit(loginForm.value)
+      } else {
+        removeCookit()
+      }
+      
       await doLogin(loginForm.value)
       const token = getToken
       console.log('token', token)
@@ -69,42 +78,125 @@ const onSubmit = () => {
   })
 }
 
+/**
+ * 勾选了记住密码存入cookit
+ * 
+ * @param {{}} form 信息
+ * @param {string} form.username 用户名
+ * @param {string} form.password 密码
+ * @param {boolean} form.remember 记住我
+ */
+function setCookit(form) {
+  Cookies.set('username', form.username, { expires: 30 })
+  Cookies.set('password', encrypt(form.password), { expires: 30 })
+  Cookies.set('remember', form.remember, { expires: 30 })
+}
+
+function removeCookit() {
+  Cookies.remove('username')
+  Cookies.remove('password')
+  Cookies.remove('remember')
+}
+
+function getCookit() {
+  const username = Cookies.get('username')
+  const password = Cookies.get('password')
+  const remember = Cookies.get('remember')
+  loginForm.value = {
+    username: username === undefined ? loginForm.value.username : username,
+    password: password === undefined ? loginForm.value.password : decrypt(password),
+    remember: remember === undefined ? false : Boolean(remember)
+  }
+}
+ 
 const onChange = (val) => {
   console.log('val', val)
 }
 
+onMounted(() => {
+  getCookit()
+})
+
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .login-page {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f5f7fa;
-}
+  background: linear-gradient(135deg, #74ebd5, #acb6e5);
 
-.login-card {
-  padding: 40px;
-  width: 400px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  background-color: #fff;
-}
+  .login-card {
+    padding: 40px;
+    width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: #ffffff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-.login-title {
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
 
-.login-form {
-  display: flex;
-  flex-direction: column;
-}
+    .login-title {
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #333;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 10px;
+    }
 
-.login-btn {
-  width: 100%;
+    .login-form {
+      display: flex;
+      flex-direction: column;
+
+      .el-form-item {
+        margin-bottom: 25px;
+      }
+
+      .el-input__inner {
+        border-radius: 5px;
+        padding-left: 40px;
+        transition: border-color 0.3s ease;
+
+        &:hover {
+          border-color: #409eff;
+        }
+      }
+
+      .el-input__prefix {
+        left: 10px;
+        color: #888;
+      }
+
+      .login-btn {
+        width: 100%;
+        height: 45px;
+        background-color: #409eff;
+        border-color: #409eff;
+        font-size: 18px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+        &:hover {
+          background-color: #66b1ff;
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
+
+    .el-checkbox {
+      margin-top: 10px;
+
+      .el-checkbox__input.is-checked+.el-checkbox__label {
+        font-weight: bold;
+        color: #409eff;
+      }
+    }
+  }
 }
 </style>
