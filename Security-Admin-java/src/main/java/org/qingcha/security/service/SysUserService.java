@@ -16,4 +16,12 @@ public interface SysUserService extends IService<SysUser> {
      * @return SysUser
      */
     SysUser queryByUsername(String username);
+
+    /**
+     * 根据用户id获取权限编码
+     *
+     * @param userId 用户id
+     * @return String
+     */
+    String queryAuthorityInfo(Long userId);
 }
