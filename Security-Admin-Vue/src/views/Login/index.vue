@@ -2,7 +2,7 @@
   <div class="login-page">
     <el-card class="login-card">
       <h2 class="login-title">用户登录</h2>
-      <el-form :model="loginForm" class="login-form" ref="loginForm" :rules="rules" label-width="80px">
+      <el-form :model="loginForm" class="login-form" ref="loginFormRef" :rules="rules" label-width="80px">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="loginForm.username" placeholder="请输入用户名">
             <template #prefix>
@@ -26,11 +26,11 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
-// import SvgIcon from '@/components/svg-icon/index.vue'
+import { login } from '@/api/auth'
 
-const loginForm = reactive({
+const loginForm = ref({
   username: '',
   password: ''
 })
@@ -47,14 +47,22 @@ const rules = {
 const loginFormRef = ref(null)
 
 const onSubmit = () => {
-  loginFormRef.value.validate((valid) => {
+  loginFormRef.value?.validate(async (valid) => {
     if (valid) {
+
+      console.log('loginForm', loginForm.value)
       ElMessage.success('登录成功！')
       // 执行登录逻辑
+      const res = await login(loginForm.value)
+      console.log(res)
     } else {
       ElMessage.error('请检查输入内容')
     }
   })
+}
+
+function changeInput() {
+
 }
 </script>
 
