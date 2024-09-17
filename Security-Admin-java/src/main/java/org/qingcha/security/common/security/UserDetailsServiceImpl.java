@@ -7,6 +7,7 @@ import org.qingcha.security.common.exception.UserCountLockException;
 import org.qingcha.security.entity.SysUser;
 import org.qingcha.security.service.SysUserService;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,10 +37,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         } else if (user.getStatus().equals("1")) {
             throw new UserCountLockException("该用户账号被封禁，具体请联系管理员");
         }
-        return new User(user.getUsername(), user.getPassword(), getUserAuthority());
+        return new User(user.getUsername(), user.getPassword(), getUserAuthority(user.getId()));
     }
 
-    public List<? extends GrantedAuthority> getUserAuthority() {
-        return new ArrayList<>();
+    public List<? extends GrantedAuthority> getUserAuthority(Long userId) {
+
+        String authoritys = service.queryAuthorityInfo(userId);
+
+        return AuthorityUtils.commaSeparatedStringToAuthorityList(authoritys);
     }
 }
