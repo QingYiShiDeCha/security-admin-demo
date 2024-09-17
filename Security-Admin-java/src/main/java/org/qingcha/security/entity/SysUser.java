@@ -1,27 +1,19 @@
 package org.qingcha.security.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
-import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 /**
  * 
  * @TableName sys_user
  */
+@EqualsAndHashCode(callSuper = true)
 @TableName(value ="sys_user")
 @Data
-@ToString
-public class SysUser implements Serializable {
-    /**
-     * 主键id
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+public class SysUser extends BaseEntity {
 
     /**
      * 用户名
@@ -65,24 +57,4 @@ public class SysUser implements Serializable {
     @TableField(value = "status")
     private String status;
 
-    /**
-     * 创建时间
-     */
-    @TableField(value = "create_time")
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    @TableField(value = "update_time")
-    private Date updateTime;
-
-    /**
-     * 备注
-     */
-    @TableField(value = "remark")
-    private String remark;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }

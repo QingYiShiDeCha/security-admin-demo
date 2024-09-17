@@ -2,6 +2,7 @@ package org.qingcha.security.entity;
 
 import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -37,5 +38,8 @@ public class BaseEntity implements Serializable {
      * 备注
      */
     private String remark;
+
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
 
 }

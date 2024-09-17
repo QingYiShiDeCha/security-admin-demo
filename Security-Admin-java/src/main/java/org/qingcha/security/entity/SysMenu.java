@@ -1,25 +1,19 @@
 package org.qingcha.security.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.util.Date;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 
  * @TableName sys_menu
  */
+@EqualsAndHashCode(callSuper = true)
 @TableName(value ="sys_menu")
 @Data
-public class SysMenu implements Serializable {
-    /**
-     * 菜单主键ID
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+public class SysMenu extends BaseEntity {
 
     /**
      * 菜单名称
@@ -68,25 +62,4 @@ public class SysMenu implements Serializable {
      */
     @TableField(value = "perms")
     private String perms;
-
-    /**
-     * 创建时间
-     */
-    @TableField(value = "create_time")
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    @TableField(value = "update_time")
-    private Date updateTime;
-
-    /**
-     * 备注
-     */
-    @TableField(value = "remark")
-    private String remark;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }
