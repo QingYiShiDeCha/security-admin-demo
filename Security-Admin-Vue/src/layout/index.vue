@@ -1,10 +1,15 @@
 <template>
   <div>
-    Layout页面
+    <el-button type="primary" @click="getUserList">接口测试</el-button>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
+import { ListUser } from '@/api/user'
+async function getUserList() {
+  const res = await ListUser()
+  console.log(res)
+}
 
 </script>
 
