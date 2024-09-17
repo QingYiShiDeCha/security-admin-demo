@@ -32,7 +32,7 @@ public class BaseEntity implements Serializable {
      */
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updatedTime;
+    private Date updateTime;
 
     /**
      * 备注
