@@ -39,7 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new User(user.getUsername(), user.getPassword(), getUserAuthority());
     }
 
-    private List<? extends GrantedAuthority> getUserAuthority() {
+    public List<? extends GrantedAuthority> getUserAuthority() {
         return new ArrayList<>();
     }
 }
