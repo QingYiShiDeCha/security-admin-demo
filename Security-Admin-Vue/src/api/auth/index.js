@@ -7,3 +7,10 @@ export function login(form) {
     params: form
   })
 }
+
+export function logout() {
+  return request({
+    url: '/logout',
+    method: 'post'
+  })
+}
