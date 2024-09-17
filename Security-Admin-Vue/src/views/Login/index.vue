@@ -18,6 +18,9 @@
           </el-input>
         </el-form-item>
         <el-form-item>
+          <el-checkbox label="记住我" v-model="loginForm.remember" @change="onChange"></el-checkbox>
+        </el-form-item>
+        <el-form-item>
           <el-button type="primary" @click="onSubmit" class="login-btn">登录</el-button>
         </el-form-item>
       </el-form>
@@ -35,7 +38,8 @@ const { doLogin, getToken } = useAuthStore()
 const router = useRouter()
 const loginForm = ref({
   username: '',
-  password: ''
+  password: '',
+  remember: false
 })
 
 const rules = {
@@ -64,6 +68,11 @@ const onSubmit = () => {
     }
   })
 }
+
+const onChange = (val) => {
+  console.log('val', val)
+}
+
 </script>
 
 <style scoped>
