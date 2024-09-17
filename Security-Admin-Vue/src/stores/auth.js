@@ -18,6 +18,13 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   /**
+   * 删除token
+   */
+  function removeToken() {
+    token.value = null
+  }
+
+  /**
    * 登录方法
    * 
    * @param {{}} data 登录数据
@@ -34,7 +41,8 @@ export const useAuthStore = defineStore('auth', () => {
     token,
     getToken,
     setToken,
-    doLogin
+    doLogin,
+    removeToken
   }
 }, {
   persist: {
