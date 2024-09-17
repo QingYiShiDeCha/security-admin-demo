@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.qingcha.security.common.result.AjaxResult;
 import org.qingcha.security.entity.SysUser;
 import org.qingcha.security.service.SysUserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -24,6 +25,7 @@ public class SysUserController {
      * @return AjaxResult
      */
     @GetMapping("/list")
+    @PreAuthorize("hasAuthority('system:user:list')")
     public AjaxResult list() {
         log.info("list");
         return AjaxResult.success(sysUserService.list());
@@ -35,6 +37,7 @@ public class SysUserController {
      * @return AjaxResult
      */
     @PostMapping("/insert")
+    @PreAuthorize("hasAuthority('system:user:add')")
     public AjaxResult insertUser(@RequestBody SysUser sysUser) {
         boolean save = sysUserService.save(sysUser);
         if (save) {
