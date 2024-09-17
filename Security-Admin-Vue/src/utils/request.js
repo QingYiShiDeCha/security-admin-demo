@@ -1,5 +1,7 @@
-import axios from "axios";
-import { ElMessage } from "element-plus";
+import axios from "axios"
+import { ElMessage } from "element-plus"
+
+import { useAuthStore } from "@/stores/auth"
 
 // 创建 axios 实例
 const request = axios.create({
@@ -10,8 +12,10 @@ const request = axios.create({
 // 请求拦截器
 request.interceptors.request.use(
   (config) => {
+    const { getToken } = useAuthStore()
     // 在请求发送之前做一些事情，比如添加 token
-    const token = localStorage.getItem('token');
+    const token = getToken;
+    console.log('请求拦截器', token)
     if (token) {
       config.headers.Authorization = `Bearer ${token}`; // 如果有 token，附加到请求头
     }
