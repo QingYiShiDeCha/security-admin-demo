@@ -15,12 +15,9 @@ request.interceptors.request.use(
     const { getToken } = useAuthStore()
     // 在请求发送之前做一些事情，比如添加 token
     const token = getToken;
-    console.log('请求拦截器', token)
-    if (token) {
+    if (token && token !== '') {
       config.headers.Authorization = `Bearer ${token}`; // 如果有 token，附加到请求头
     }
-    const requestData = config.params
-    console.log('请求数据', requestData)
     // 可以在这里添加一些 loading 状态
     return config; // 返回配置，继续请求
   },
@@ -36,8 +33,6 @@ request.interceptors.response.use(
   (response) => {
     // 处理响应数据
     const { data } = response;
-    console.log('res', response)
-    console.log('data', data)
     if (data.code !== 200) {
       // 如果接口返回的状态码不是 200，认为是错误
       ElMessage.error(data.message || "请求失败");
@@ -50,29 +45,29 @@ request.interceptors.response.use(
   (error) => {
     // 处理响应错误
     let message = "请求失败";
-
+    console.log('响应错误信息', error)
     if (error.response) {
       // 根据 HTTP 状态码自定义错误提示
       const status = error.response.status;
       switch (status) {
         case 400:
-          message = "请求错误";
+          message = error.response.data.message || "请求错误";
           break;
         case 401:
-          message = "未授权，请重新登录";
+          message = error.response.data.message || "未授权，请重新登录";
           // 可以在这里执行登出操作
           break;
         case 403:
-          message = "拒绝访问";
+          message = error.response.data.message || "拒绝访问";
           break;
         case 404:
-          message = "请求地址不存在";
+          message = error.response.data.message || "请求地址不存在";
           break;
         case 500:
-          message = "服务器内部错误";
+          message = error.response.data.message || "服务器内部错误";
           break;
         default:
-          message = "未知错误";
+          message = error.response.data.message || "未知错误";
       }
     }
 
