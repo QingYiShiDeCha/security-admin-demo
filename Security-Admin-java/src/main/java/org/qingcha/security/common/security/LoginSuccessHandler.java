@@ -31,7 +31,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         response.setContentType("application/json;charset=utf-8");
         ServletOutputStream outputStream = response.getOutputStream();
 
-        String username = "user";
+        String username = authentication.getName();
         log.info("进入登录处理器");
         try {
             String token = JwtUtils.genrateJwtToken(username);
