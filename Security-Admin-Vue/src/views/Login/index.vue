@@ -68,7 +68,7 @@ const onSubmit = () => {
       await doLogin(loginForm.value)
       const token = getToken
       console.log('token', token)
-      if (token && token !== '') {
+      if (token !== '' && token) {
         ElMessage.success('登录成功!')
         router.push('/')
       }
