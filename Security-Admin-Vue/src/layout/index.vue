@@ -1,11 +1,16 @@
 <template>
   <div class="app-wrapper">
     <el-container>
-      <el-aside width="200px" :style="{ height: `${height}px`, minHeight: `${minHeight}px` }"
-        class="sidebar-container">Asider</el-aside>
+      <el-aside width="200px" :style="{ height: `${height}px`, minHeight: `${minHeight}px` }" class="sidebar-container">
+        <Menu />
+      </el-aside>
       <el-container>
-        <el-header>Header</el-header>
-        <el-main>Main</el-main>
+        <el-header>
+          <Header />
+        </el-header>
+        <el-main>
+          <Tabs />
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -13,6 +18,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { Header, Main, Menu, Tabs } from '@/layout'
 const height = ref(0)
 const minHeight = ref(0)
 
