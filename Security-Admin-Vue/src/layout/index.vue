@@ -1,30 +1,54 @@
 <template>
-  <div>
-    <el-col>
-      <el-button type="primary" @click="getUserList">接口测试</el-button>
-      <el-button type="primary" @click="doLogout">退出测试</el-button>
-    </el-col>
+  <div class="app-wrapper">
+    <el-container>
+      <el-aside width="200px" :style="{ height: `${height}px`, minHeight: `${minHeight}px` }"
+        class="sidebar-container">Asider</el-aside>
+      <el-container>
+        <el-header>Header</el-header>
+        <el-main>Main</el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
 <script setup>
-import { ListUser } from '@/api/user'
-import { logout } from '@/api/auth'
-import { useAuthStore } from '@/stores/auth'
+import { ref, onMounted } from 'vue'
+const height = ref(0)
+const minHeight = ref(0)
 
-const { removeToken } = useAuthStore()
-
-async function getUserList() {
-  const res = await ListUser()
-  console.log(res)
+function getHeight() {
+  height.value = document.documentElement.clientHeight
 }
 
-async function doLogout() {
-  const res = await logout()
-  console.log('退出res', res)
-  removeToken()
-}
-
+onMounted(() => {
+  getHeight()
+  minHeight.value = document.documentElement.clientHeight
+  window.addEventListener('resize', getHeight)
+})
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.app-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar-container {
+  background-color: #2d3a4b;
+  // height: 100%;
+}
+
+.el-container {
+  height: 100%
+}
+
+.el-header {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+:deep(ul.el-menu) {
+  border-right-width: 0px
+}
+</style>
