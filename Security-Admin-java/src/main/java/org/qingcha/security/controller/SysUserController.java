@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.qingcha.security.common.result.AjaxResult;
 import org.qingcha.security.entity.SysUser;
+import org.qingcha.security.service.SysMenuService;
 import org.qingcha.security.service.SysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class SysUserController {
     private final SysUserService sysUserService;
+    private final SysMenuService sysMenuService;
 
     /**
      * 获取用户列表
@@ -44,6 +46,17 @@ public class SysUserController {
             return AjaxResult.success();
         }
         return AjaxResult.error();
+    }
+
+    /**
+     * 查询用户菜单
+     *
+     * @param id 用户id
+     * @return AjaxResult
+     */
+    @GetMapping("/userMenu/{id}")
+    public AjaxResult findUserMenuByUserId(@PathVariable Long id) {
+        return AjaxResult.success(sysMenuService.findMenuByUserId(id));
     }
 
 }
