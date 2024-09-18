@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 
  * @TableName sys_menu
@@ -62,4 +65,7 @@ public class SysMenu extends BaseEntity {
      */
     @TableField(value = "perms")
     private String perms;
+
+    @TableField(exist = false)
+    private List<SysMenu> children = new ArrayList<>();
 }
