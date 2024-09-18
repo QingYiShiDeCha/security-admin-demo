@@ -16,18 +16,18 @@ public class JwtUtils {
     /**
      * 签发JWT
      * @param id id
-     * @param suject 可以是json数据， 尽可能少
+     * @param subject 可以是json数据， 尽可能少
      * @param ttlMillis 时间
      * @return token
      */
-    public static String createJWT(String id, String suject, long ttlMillis) throws Base64DecodingException {
+    public static String createJWT(String id, String subject, long ttlMillis) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         long currentTimeMillis = System.currentTimeMillis();
         Date now = new Date(currentTimeMillis);
         SecretKey secretKey = generalKey();
         JwtBuilder builder = Jwts.builder()
                 .setId(id)
-                .setSubject(suject)
+                .setSubject(subject)
                 .setIssuer("QingCha")
                 .setIssuedAt(now)
                 .signWith(signatureAlgorithm, secretKey);
@@ -44,6 +44,12 @@ public class JwtUtils {
     }
 
 
+    /**
+     * 验证token是否有效
+     *
+     * @param jwt token
+     * @return CheckResult
+     */
     public static CheckResult validateJWT(String jwt)  {
         CheckResult checkResult = new CheckResult();
         Claims claims;
@@ -64,7 +70,7 @@ public class JwtUtils {
         return checkResult;
     }
 
-    private static SecretKey generalKey() throws Base64DecodingException {
+    private static SecretKey generalKey()  {
         byte[] decode = Base64.decode(JwtConstant.JWT_SECERT);
         return new SecretKeySpec(decode, 0, decode.length, "AES");
     }
