@@ -10,10 +10,15 @@ export const useMenuStore = defineStore('menu', () => {
     menuList.value = vals
   }
 
+  function removeMenuStore() {
+    sessionStorage.removeItem('menu')
+  }
+
   return {
     menuList,
     getMenuList,
-    setMenuList
+    setMenuList,
+    removeMenuStore
   }
 
 }, {

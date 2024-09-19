@@ -20,7 +20,7 @@ export const useAuthStore = defineStore('auth', () => {
    * 删除token
    */
   function removeToken() {
-    token.value = null
+    localStorage.removeItem('auth')
   }
 
   return {

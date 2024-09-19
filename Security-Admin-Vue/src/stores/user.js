@@ -13,9 +13,17 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = values
   }
 
+  /**
+   * remove userInfo
+   */
+  function removeUserInfo() {
+    sessionStorage.removeItem('user')
+  }
+
   return {
     userInfo,  // Directly expose the reactive ref
-    setUserInfo
+    setUserInfo,
+    removeUserInfo
   }
 }, {
   persist: {
