@@ -21,7 +21,7 @@
           <el-checkbox label="记住我" v-model="loginForm.remember" @change="onChange"></el-checkbox>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit" class="login-btn">登录</el-button>
+          <el-button :loading="value" type="primary" @click="onSubmit" class="login-btn">登录</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -32,11 +32,16 @@
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useAuthStore } from '@/stores/auth'
+import { useMenuStore } from '@/stores/menu'
 import { useRouter } from 'vue-router'
+import { login } from '@/api/auth'
 import { encrypt, decrypt } from '@/utils/jsencrypt'
 import Cookies from 'js-cookie'
+import { useToggle } from '@vueuse/core'
 
-const { doLogin, getToken } = useAuthStore()
+const [value, toggle] = useToggle()
+const { setToken } = useAuthStore()
+const { setMenuList } = useMenuStore()
 const router = useRouter()
 const loginForm = ref({
   username: '',
@@ -56,6 +61,7 @@ const rules = {
 const loginFormRef = ref(null)
 
 const onSubmit = () => {
+  toggle(true)
   loginFormRef.value?.validate(async (valid) => {
     if (valid) {
 
@@ -64,13 +70,16 @@ const onSubmit = () => {
       } else {
         removeCookit()
       }
-      
-      await doLogin(loginForm.value)
-      const token = getToken
-      console.log('token', token)
-      if (token !== '' && token) {
-        ElMessage.success('登录成功!')
-        router.push('/')
+
+      const res = await login(loginForm.value)
+      if (res.code === 200) {
+        setTimeout(() => {
+          toggle(false)
+        })
+        setToken(res.data.token)
+        setMenuList(res.data.menu)
+        router.replace('/')
+        ElMessage.success('登录成功')
       }
     } else {
       ElMessage.error('请检查输入内容')
@@ -108,7 +117,7 @@ function getCookit() {
     remember: remember === undefined ? false : Boolean(remember)
   }
 }
- 
+
 const onChange = (val) => {
   console.log('val', val)
 }
