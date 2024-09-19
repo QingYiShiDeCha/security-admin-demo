@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 登录成功处理器
@@ -45,7 +46,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         String username = authentication.getName();
         log.info("进入登录处理器");
         try {
-            String token = JwtUtils.genrateJwtToken(username);
+            String token = JwtUtils.genrateJwtToken(username + UUID.randomUUID());
 
 
             SysUser user = sysUserService.queryByUsername(username);
