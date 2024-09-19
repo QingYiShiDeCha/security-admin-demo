@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.qingcha.security.entity.SysMenu;
 import org.qingcha.security.entity.SysRole;
 import org.qingcha.security.entity.SysUser;
+import org.qingcha.security.entity.vo.UserInfoVo;
 import org.qingcha.security.service.SysMenuService;
 import org.qingcha.security.service.SysRoleService;
 import org.qingcha.security.service.SysUserService;
@@ -124,6 +125,41 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
 
         log.info("authority info:{}", authorityInfo);
         return authorityInfo;
+    }
+
+    /**
+     * 根据用户id获取用户信息
+     *
+     * @param userId 用户id
+     * @return UserInfoVo
+     */
+    @Override
+    public UserInfoVo queryUserInfoByUserId(Long userId) {
+        SysUser user = baseMapper.selectById(userId);
+
+        List<SysRole> sysRoles = queryRolesByUserId(userId);
+        List<String> userRoles = sysRoles.stream().map(SysRole::getCode).collect(Collectors.toList());
+
+        UserInfoVo userInfoVo = new UserInfoVo();
+        userInfoVo.setUsername(user.getUsername());
+        userInfoVo.setAvatar(user.getAvatar());
+        userInfoVo.setEmail(user.getEmail());
+        userInfoVo.setRemark(user.getRemark());
+        userInfoVo.setRoles(userRoles);
+        return userInfoVo;
+    }
+
+    /**
+     * 根据用户id获取用户角色
+     *
+     * @param userId 用户id
+     * @return List
+     */
+    private List<SysRole> queryRolesByUserId(Long userId) {
+        return sysRoleService.list(
+                new LambdaQueryWrapper<SysRole>()
+                        .inSql(SysRole::getId, "select role_id from sys_user_role where user_id = " + userId)
+        );
     }
 
 }

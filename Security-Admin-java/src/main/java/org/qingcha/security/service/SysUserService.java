@@ -2,6 +2,7 @@ package org.qingcha.security.service;
 
 import org.qingcha.security.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.qingcha.security.entity.vo.UserInfoVo;
 
 /**
 * @author QingCha
@@ -24,4 +25,12 @@ public interface SysUserService extends IService<SysUser> {
      * @return String
      */
     String queryAuthorityInfo(Long userId);
+
+    /**
+     * 根据用户id获取用户信息
+     *
+     * @param userId 用户id
+     * @return UserInfoVo
+     */
+    UserInfoVo queryUserInfoByUserId(Long userId);
 }
