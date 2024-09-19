@@ -1,11 +1,15 @@
 package org.qingcha.security.common.security;
 
-import com.alibaba.druid.support.json.JSONUtils;
-import com.alibaba.fastjson.JSON;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.qingcha.security.common.result.AjaxResult;
 import org.qingcha.security.common.utils.JwtUtils;
+import org.qingcha.security.entity.SysMenu;
+import org.qingcha.security.entity.SysUser;
+import org.qingcha.security.service.SysMenuService;
+import org.qingcha.security.service.SysUserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -17,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,30 +30,44 @@ import java.util.Map;
  */
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
+
+    private final SysUserService sysUserService;
+    private final SysMenuService sysMenuService;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         response.setContentType("application/json;charset=utf-8");
         ServletOutputStream outputStream = response.getOutputStream();
-
+        ObjectMapper objectMapper = new ObjectMapper();
         String username = authentication.getName();
         log.info("进入登录处理器");
         try {
             String token = JwtUtils.genrateJwtToken(username);
 
+
+            SysUser user = sysUserService.queryByUsername(username);
+            List<SysMenu> userMenus = sysMenuService.findMenuByUserId(user.getId());
+            Map<String, Object> data = new HashMap<>();
+            data.put("token", token);
+            data.put("menu", userMenus);
+
             Map<String, Object> map = new HashMap<>();
-            map.put("token", token);
+            map.put("data", data);
             map.put("code", HttpServletResponse.SC_OK);
             map.put("message", "登录成功");
 
-            outputStream.write(JSONUtils.toJSONString(map).getBytes(StandardCharsets.UTF_8));
+            String value = objectMapper.writeValueAsString(map);
+
+            outputStream.write(value.getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
             outputStream.close();
         } catch (Base64DecodingException e) {
             throw new RuntimeException(e);
         }
 
-
-
     }
+
+
 }
