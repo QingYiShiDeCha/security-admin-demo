@@ -33,6 +33,7 @@ import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useAuthStore } from '@/stores/auth'
 import { useMenuStore } from '@/stores/menu'
+import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { login } from '@/api/auth'
 import { encrypt, decrypt } from '@/utils/jsencrypt'
@@ -42,6 +43,7 @@ import { useToggle } from '@vueuse/core'
 const [value, toggle] = useToggle()
 const { setToken } = useAuthStore()
 const { setMenuList } = useMenuStore()
+const { setUserInfo } = useUserStore()
 const router = useRouter()
 const loginForm = ref({
   username: '',
@@ -78,6 +80,7 @@ const onSubmit = () => {
         })
         setToken(res.data.token)
         setMenuList(res.data.menu)
+        setUserInfo(res.data.userInfo)
         router.replace('/')
         ElMessage.success('登录成功')
       }
