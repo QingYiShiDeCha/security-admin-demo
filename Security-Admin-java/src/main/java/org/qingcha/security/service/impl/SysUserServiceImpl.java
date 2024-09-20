@@ -138,8 +138,26 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
         SysUser user = baseMapper.selectById(userId);
 
         List<SysRole> sysRoles = queryRolesByUserId(userId);
-        List<String> userRoles = sysRoles.stream().map(SysRole::getCode).collect(Collectors.toList());
+        return getUserInfoVo(user, sysRoles);
+    }
 
+    /**
+     * 根据用户id获取用户信息
+     *
+     * @param username 用户名字
+     * @return UserInfoVo
+     */
+    @Override
+    public UserInfoVo queryUserInfoByUsername(String username) {
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ObjectUtil.isNotNull(username), SysUser::getUsername, username);
+        SysUser user = baseMapper.selectOne(queryWrapper);
+        List<SysRole> sysRoles = queryRolesByUserId(user.getId());
+        return getUserInfoVo(user, sysRoles);
+    }
+
+    private UserInfoVo getUserInfoVo(SysUser user, List<SysRole> sysRoles) {
+        List<String> userRoles = sysRoles.stream().map(SysRole::getCode).collect(Collectors.toList());
         UserInfoVo userInfoVo = new UserInfoVo();
         userInfoVo.setUserId(user.getId());
         userInfoVo.setUsername(user.getUsername());

@@ -33,4 +33,12 @@ public interface SysUserService extends IService<SysUser> {
      * @return UserInfoVo
      */
     UserInfoVo queryUserInfoByUserId(Long userId);
+
+    /**
+     * 根据用户id获取用户信息
+     *
+     * @param username 用户名字
+     * @return UserInfoVo
+     */
+    UserInfoVo queryUserInfoByUsername(String username);
 }
