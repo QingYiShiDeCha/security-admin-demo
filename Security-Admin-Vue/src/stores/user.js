@@ -17,7 +17,7 @@ export const useUserStore = defineStore('user', () => {
    * remove userInfo
    */
   function removeUserInfo() {
-    sessionStorage.removeItem('user')
+    userInfo.value = null
   }
 
   return {
