@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class UserInfoVo {
+    private Long userId;
     private String username;
     private String avatar;
     private String email;
