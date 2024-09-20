@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref('')
+  const isLogin = ref(false)
   /**
    * 获取token
    */
@@ -14,17 +15,20 @@ export const useAuthStore = defineStore('auth', () => {
    */
   function setToken(val) {
     token.value = val
+    isLogin.value = true
   }
 
   /**
    * 删除token
    */
   function removeToken() {
-    localStorage.removeItem('auth')
+    token.value = null
+    isLogin.value = false
   }
 
   return {
     token,
+    isLogin,
     getToken,
     setToken,
     removeToken
