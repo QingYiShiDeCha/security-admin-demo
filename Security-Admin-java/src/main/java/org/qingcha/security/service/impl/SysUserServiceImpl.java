@@ -141,6 +141,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
         List<String> userRoles = sysRoles.stream().map(SysRole::getCode).collect(Collectors.toList());
 
         UserInfoVo userInfoVo = new UserInfoVo();
+        userInfoVo.setUserId(user.getId());
         userInfoVo.setUsername(user.getUsername());
         userInfoVo.setAvatar(user.getAvatar());
         userInfoVo.setEmail(user.getEmail());
