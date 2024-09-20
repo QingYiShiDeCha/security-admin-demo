@@ -10,6 +10,7 @@
         </el-header>
         <el-main>
           <Tabs />
+          <Main />
         </el-main>
       </el-container>
     </el-container>
