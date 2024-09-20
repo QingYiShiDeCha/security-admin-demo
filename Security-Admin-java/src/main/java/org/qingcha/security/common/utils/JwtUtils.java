@@ -39,8 +39,8 @@ public class JwtUtils {
         return builder.compact();
     }
 
-    public static String genrateJwtToken(String username) throws Base64DecodingException {
-        return createJWT(username, username, 60 * 60 * 1000);
+    public static String genrateJwtToken(Long userId, String username) throws Base64DecodingException {
+        return createJWT(String.valueOf(userId), username, 60 * 60 * 1000);
     }
 
 

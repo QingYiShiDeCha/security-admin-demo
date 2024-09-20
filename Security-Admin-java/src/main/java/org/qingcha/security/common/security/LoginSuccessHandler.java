@@ -15,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,10 +45,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         String username = authentication.getName();
         log.info("进入登录处理器");
         try {
-            String token = JwtUtils.genrateJwtToken(username + UUID.randomUUID());
-
-
             SysUser user = sysUserService.queryByUsername(username);
+
+            String token = JwtUtils.genrateJwtToken(user.getId(), username + UUID.randomUUID());
+
             List<SysMenu> userMenus = sysMenuService.findMenuByUserId(user.getId());
             UserInfoVo userInfoVo = sysUserService.queryUserInfoByUserId(user.getId());
             Map<String, Object> data = new HashMap<>();
